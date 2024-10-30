@@ -1,12 +1,12 @@
-import Board from './chessBoard/components/Board' 
+import Board from './chessboard/components/Board'
+import Button from './chessboard/components/Button'
 
 function App() {
   return (
-    <>
-      <div>
-        <Board/>
-      </div>
-    </>
+    <div >
+      <Button>Reset</Button>
+      <Board />
+    </div>
   )
 }
 
