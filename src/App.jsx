@@ -3,7 +3,8 @@ import { Chess } from 'chess.js';
 import Board from './chessboard/components/Board';
 import Button from './chessboard/components/Button';
 import TextBox from './chessboard/components/TextBox';
-import { callAPI, callAnalysisAPI } from './chessboard/api'; 
+import { callAPI, callAnalysisAPI, callStateAPI  } from './chessboard/api'; 
+
 
 function App() {
   const [bestMove, setBestMove] = useState("");
@@ -25,10 +26,19 @@ function App() {
     }
   };
 
+  const handleStateClick = async () => {
+    const fen = game.fen(); 
+    const stateAnalysis = await callStateAPI(fen); 
+    if (stateAnalysis) {
+      console.log("State Analysis:", stateAnalysis);
+    }
+  };
+
   return (
     <div>
       <Button onClick={handleBestMoveClick}>Best Move</Button>
       <Button onClick={handleAnalysisClick}>Analysis</Button>
+      <Button onClick={handleStateClick}>State</Button>
       <TextBox bestMove={bestMove} />
       <Board onGameUpdate={setFenHistory} />
     </div>

@@ -31,3 +31,18 @@ export const callAPI = async (fen) => {
     }
   };
   
+  export const callStateAPI = async (fen) => {
+    const url = `http://localhost:8000/state`;
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fen }) 
+      });
+      const data = await response.json();
+      return data.stateAnalysis; 
+    } catch (error) {
+      console.error("Error fetching state analysis:", error);
+      return null;
+    }
+  };
