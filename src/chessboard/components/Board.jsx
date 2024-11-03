@@ -3,15 +3,15 @@ import { Chessboard } from 'react-chessboard';
 import { Chess } from 'chess.js';
 import PropTypes from 'prop-types';
 
-const Board = ({ onGameUpdate }) => {
-  const [game, setGame] = useState(new Chess());
+const Board = ({ game, setGame, onGameUpdate }) => {
+  // const [game, setGame] = useState(new Chess());
   const [fenHistory, setFenHistory] = useState([game.fen()]);
 
   const makeAMove = (move) => {
     const gameCopy = { ...game };
     const result = gameCopy.move(move);
     setGame(gameCopy);
-    
+
     if (result) {
       const newFen = gameCopy.fen();
       setFenHistory([...fenHistory, newFen]);

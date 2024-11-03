@@ -8,7 +8,7 @@ import { callAPI, callAnalysisAPI, callStateAPI } from './chessboard/api';
 function App() {
   const [bestMove, setBestMove] = useState("");
   const [title, setTitle] = useState("Chess App");
-  const [game] = useState(new Chess());
+  const [game, setGame] = useState(new Chess());
   const [fenHistory, setFenHistory] = useState([]);
 
   const handleBestMoveClick = async () => {
@@ -40,7 +40,7 @@ function App() {
   return (
     <div style={{ display: 'flex', height: '100vh', width: '100vw' }}>
       <div style={{ display: 'flex' }}>
-        <Board onGameUpdate={setFenHistory} />
+        <Board game={game} setGame={setGame} onGameUpdate={setFenHistory} />
       </div>
       <div style={{ flex: 1, padding: '20px', backgroundColor: '#000000', borderLeft: '1px solid #ddd' }}>
         <h1 style={{ textAlign: 'center', margin: '20px', color: 'white' }}>{title}</h1>
