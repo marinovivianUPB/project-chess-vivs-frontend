@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Chessboard } from 'react-chessboard';
 import PropTypes from 'prop-types';
 
-const Board = ({ game, setGame, onGameUpdate }) => {
+const Board = ({ game, setGame, onGameUpdate, arrows }) => {
   // const [game, setGame] = useState(new Chess());
   const [fenHistory, setFenHistory] = useState([game.fen()]);
 
@@ -14,7 +14,7 @@ const Board = ({ game, setGame, onGameUpdate }) => {
     if (result) {
       const newFen = gameCopy.fen();
       setFenHistory([...fenHistory, newFen]);
-      onGameUpdate([...fenHistory, newFen]);
+      onGameUpdate();
     }
     return result;
   };
@@ -31,7 +31,7 @@ const Board = ({ game, setGame, onGameUpdate }) => {
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', width: '100vh' }}>
-      <Chessboard position={game.fen()} onPieceDrop={onDrop} />
+      <Chessboard position={game.fen()} onPieceDrop={onDrop} customArrows={arrows} />
     </div>
   );
 };

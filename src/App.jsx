@@ -14,6 +14,7 @@ function App() {
   const [fenHistory, setFenHistory] = useState([]);
   const [loading, setLoading] = useState(false);
   const [colorMenu, setColorMenu] = useState(false);
+  const [arrows, setArrows] = useState([]);
 
   const { language, text, changeLanguage } = useLanguage();
 
@@ -29,7 +30,9 @@ function App() {
     const fen = game.fen();
     const move = await loader(() => bestMoveAnalysis(fen, language));
     if (move) {
-      setBestMove(move);
+      setBestMove(move.agent_response);
+      console.log(move)
+      setArrows([[move.data.from_square, move.data.to_square, 'green']]);
     }
   };
 
@@ -56,7 +59,7 @@ function App() {
   return (
     <div style={{ display: 'flex', height: '100vh', width: '100vw' }}>
       <div style={{ display: 'flex' }}>
-        <Board game={game} setGame={setGame} onGameUpdate={setFenHistory} />
+        <Board game={game} setGame={setGame} onGameUpdate={() =>setArrows([])} arrows={arrows} />
       </div>
       <div style={{ flex: 1, padding: '20px', backgroundColor: '#000000', borderLeft: '1px solid #ddd' }}>
         <div className='flex justify-between'>

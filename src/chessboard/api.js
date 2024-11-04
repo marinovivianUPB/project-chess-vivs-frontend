@@ -7,7 +7,7 @@ export const bestMoveAnalysis = async (fen, language) => {
         body: JSON.stringify({ fen, language })
       });
       const data = await response.json();
-      return data.agent_response;
+      return data;
     } catch (error) {
       console.error("Error fetching best move:", error);
       return null;
