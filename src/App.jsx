@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Chess } from 'chess.js';
 import Board from './chessboard/components/Board';
 import Button from './chessboard/components/Button';
-import TextBox from './chessboard/components/textBox';
+import TextBox from './chessboard/components/TextBox';
 import { bestMoveAnalysis, playerAnalysis, boardAnalysis } from './chessboard/api';
 import Spinner from './assets/Spinner';
 import { useLanguage } from './language';

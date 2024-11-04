@@ -1,5 +1,7 @@
+const api_url = import.meta.env.VITE_API_URL;
+
 export const bestMoveAnalysis = async (fen, language) => {
-    const url = `http://localhost:8000/best-move`;
+    const url = `${api_url}/best-move`;
     try {
       const response = await fetch(url, {
         method: 'POST',
@@ -16,7 +18,7 @@ export const bestMoveAnalysis = async (fen, language) => {
   
 
   export const playerAnalysis = async (fen, history, language, player) => {
-    const url = `http://localhost:8000/player`;
+    const url = `${api_url}/player`;
     try {
       const response = await fetch(url, {
         method: 'POST',
@@ -32,7 +34,7 @@ export const bestMoveAnalysis = async (fen, language) => {
   };
   
   export const boardAnalysis = async (fen, language) => {
-    const url = `http://localhost:8000/state`;
+    const url = `${api_url}/state`;
     try {
       const response = await fetch(url, {
         method: 'POST',
@@ -48,7 +50,7 @@ export const bestMoveAnalysis = async (fen, language) => {
   };
 
 export const chatbotAPI = async (message) => {
-  const url = `http://127.0.0.1:8000/chat`;
+  const url = `${api_url}/chat`;
   try {
     const response = await fetch(url, {
       method: 'POST',
