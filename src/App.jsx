@@ -3,7 +3,7 @@ import { Chess } from 'chess.js';
 import Board from './chessboard/components/Board';
 import Button from './chessboard/components/Button';
 import TextBox from './chessboard/components/textBox';
-import { callAPI, callAnalysisAPI, callStateAPI } from './chessboard/api';
+import { bestMoveAnalysis, playerAnalysis, boardAnalysis } from './chessboard/api';
 import Spinner from './assets/Spinner';
 import { useLanguage } from './language';
 
@@ -13,11 +13,11 @@ function App() {
   const [game, setGame] = useState(new Chess());
   const [fenHistory, setFenHistory] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [colorMenu, setColorMenu] = useState(false);
 
   const { language, text, changeLanguage } = useLanguage();
 
   const loader = async (fun) => {
-    debugger
     setLoading(true);
     const res = await fun()
     setLoading(false);
@@ -27,15 +27,18 @@ function App() {
   const handleBestMoveClick = async () => {
     setTitle(text[0]);
     const fen = game.fen();
-    const move = await loader(() => callAPI(fen, language));
+    const move = await loader(() => bestMoveAnalysis(fen, language));
     if (move) {
       setBestMove(move);
     }
   };
 
-  const handleAnalysisClick = async () => {
+  const handleAnalysisClick = async (player) => {
+    setColorMenu(false);
     setTitle(text[1]);
-    const analysis = await loader(() => callAnalysisAPI(fenHistory, language));
+    const fen = game.fen();
+    const history = game.history({ verbose: true });
+    const analysis = await loader(() => playerAnalysis(fen, history, language, player));
     if (analysis) {
       setBestMove(analysis);
     }
@@ -44,7 +47,7 @@ function App() {
   const handleStateClick = async () => {
     setTitle(text[2]);
     const fen = game.fen();
-    const stateAnalysis = await loader(() => callStateAPI(fen, language));
+    const stateAnalysis = await loader(() => boardAnalysis(fen, language));
     if (stateAnalysis) {
       setBestMove(stateAnalysis);
     }
@@ -68,8 +71,28 @@ function App() {
         <h1 style={{ textAlign: 'center', margin: '20px', color: 'white' }}>{text[3]}</h1>
         <div style={{ display: 'flex', gap: '10px', width: '100%' }}>
           <Button onClick={handleBestMoveClick} style={{ flex: 1 }}>{text[0]}</Button>
-          <Button onClick={handleAnalysisClick} style={{ flex: 1 }}>{text[1]}</Button>
           <Button onClick={handleStateClick} style={{ flex: 1 }}>{text[2]}</Button>
+          <div className='flex-1 flex flex-col w-48'>
+            <Button onClick={() => setColorMenu(col => !col)}>{text[1]}</Button>
+            {colorMenu &&
+              <div className='absolute w-48 z-10'>
+                <div className='relative top-12 w-full'>
+                  <button 
+                    className='bg-white text-black w-full px-2'
+                    onClick={() => handleAnalysisClick(1)}
+                  >
+                    {text['w']}
+                  </button>
+                  <button 
+                    className='w-full'
+                    onClick={() => handleAnalysisClick(0)}
+                  >
+                    {text['b']}
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
         </div>
         <div className='mt-5'>
           <h2 className='text-xl font-bold'>{title}</h2>

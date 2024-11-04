@@ -1,4 +1,4 @@
-export const callAPI = async (fen, language) => {
+export const bestMoveAnalysis = async (fen, language) => {
     const url = `http://localhost:8000/best-move`;
     try {
       const response = await fetch(url, {
@@ -15,13 +15,13 @@ export const callAPI = async (fen, language) => {
   };
   
 
-  export const callAnalysisAPI = async (history, language) => {
-    const url = `http://localhost:8000/analysis`;
+  export const playerAnalysis = async (fen, history, language, player) => {
+    const url = `http://localhost:8000/player`;
     try {
       const response = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ history, language }) 
+        body: JSON.stringify({ fen, history, language, player }) 
       });
       const data = await response.json();
       return data.agent_response;
@@ -31,7 +31,7 @@ export const callAPI = async (fen, language) => {
     }
   };
   
-  export const callStateAPI = async (fen, language) => {
+  export const boardAnalysis = async (fen, language) => {
     const url = `http://localhost:8000/state`;
     try {
       const response = await fetch(url, {

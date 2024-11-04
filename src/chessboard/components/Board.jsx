@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Chessboard } from 'react-chessboard';
-import { Chess } from 'chess.js';
 import PropTypes from 'prop-types';
 
 const Board = ({ game, setGame, onGameUpdate }) => {
