@@ -1,10 +1,10 @@
-export const callAPI = async (fen) => {
+export const callAPI = async (fen, language) => {
     const url = `http://localhost:8000/best-move`;
     try {
       const response = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fen })
+        body: JSON.stringify({ fen, language })
       });
       const data = await response.json();
       return data.agent_response;
@@ -15,13 +15,13 @@ export const callAPI = async (fen) => {
   };
   
 
-  export const callAnalysisAPI = async (fenHistory) => {
+  export const callAnalysisAPI = async (history, language) => {
     const url = `http://localhost:8000/analysis`;
     try {
       const response = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fenHistory }) 
+        body: JSON.stringify({ history, language }) 
       });
       const data = await response.json();
       return data.agent_response;
@@ -31,13 +31,13 @@ export const callAPI = async (fen) => {
     }
   };
   
-  export const callStateAPI = async (fen) => {
+  export const callStateAPI = async (fen, language) => {
     const url = `http://localhost:8000/state`;
     try {
       const response = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fen }) 
+        body: JSON.stringify({ fen, language }) 
       });
       const data = await response.json();
       return data.agent_response; 
