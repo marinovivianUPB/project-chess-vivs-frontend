@@ -1,32 +1,49 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import Chat from "./Chat";
-import { analyzeNextSteps } from "../AnalizeNextSteps";
+import {chatbotAPI} from "../../chessboard/api"
 import Input from "./Input";
 
+
 const Chatbot = () => {
-  const [userResponse, setUserResponse] = useState(""); 
-  const [step, setStep] = useState(0); 
+  const [userResponse, setUserResponse] = useState("");
+  const [step, setStep] = useState(0);
   const [botResponse, setBotResponse] = useState({
     message: "",
     sender: "bot"
-  }); 
-  const [sendUserResponse, setSendUserResponse] = useState(""); 
+  });
+  const [sendUserResponse, setSendUserResponse] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [language, setLanguage] = useState("en");
 
-  const setNextStep = (response) => {
+  // setting next step when there's response and 
+  const loader = async (fun) => {
+    debugger
+    setLoading(true);
+    const res = await fun()
+    setLoading(false);
+    return res;
+  }
+
+  const setChat = async(prompt) => {
     setStep(prevState => prevState + 1);
-    setSendUserResponse(response);
-    const res = analyzeNextSteps(step, response);
-    setBotResponse({ ...res, sender: "bot" });
+    const chatResponse = await loader(() => chatbotAPI(prompt));
+    console.log("hola")
+    console.log(chatResponse)
+    setSendUserResponse(prompt);
+    let res = chatResponse;
+    setBotResponse({ message: res, sender: "bot" });
     setUserResponse("");
   };
 
-  const handleInputChange = (e) => {
+
+  // event handlers
+  const handleInputChange = (e ) => {
     setUserResponse(e.target.value);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setNextStep(userResponse);
+    setChat(userResponse);
   };
 
   return (
