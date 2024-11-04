@@ -1,24 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
-//import "./Chat.scss";
+import { useState, useEffect, useRef } from "react";
+import PropTypes from "prop-types";
 
-interface Props {
-  userResponse: string;
-  botResponse: {
-    message: string;
-    sender: string;
-  };
-  sendUserResponse: string;
-}
-
-interface MessagesInfo {
-  message: string;
-  sender: string;
-}
-
-const Chat: React.FC<Props> = props => {
-  const [messages, setMessages] = useState<MessagesInfo[]>([]);
-  const dummyRef = useRef<HTMLDivElement>(null);
-  const bodyRef = useRef<HTMLDivElement>(null);
+const Chat = ({ botResponse, sendUserResponse }) => {
+  const [messages, setMessages] = useState([]);
+  const dummyRef = useRef(null);
+  const bodyRef = useRef(null);
 
   // stacking up messages
   useEffect(() => {
@@ -31,21 +17,21 @@ const Chat: React.FC<Props> = props => {
         }
       ]);
     } else {
-      let tempArray = [...messages];
-      tempArray.push({ message: props.sendUserResponse, sender: "user" });
+      const tempArray = [...messages];
+      tempArray.push({ message: sendUserResponse, sender: "user" });
       setMessages(tempArray);
 
       setTimeout(() => {
-        let temp2 = [...tempArray];
-        temp2.push(props.botResponse);
+        const temp2 = [...tempArray];
+        temp2.push(botResponse);
         setMessages(temp2);
       }, 1000);
     }
-  }, [props.sendUserResponse, props.botResponse]);
+  }, [sendUserResponse, botResponse]);
 
   // enable autoscroll after each message
   useEffect(() => {
-    if (dummyRef && dummyRef.current && bodyRef && bodyRef.current) {
+    if (dummyRef.current && bodyRef.current) {
       bodyRef.current.scrollTo({
         top: dummyRef.current.offsetTop,
         behavior: "smooth"
@@ -55,17 +41,25 @@ const Chat: React.FC<Props> = props => {
 
   return (
     <div className="message-container" ref={bodyRef}>
-      {messages.map(chat => (
-        <div key={chat.message}>
+      {messages.map((chat, index) => (
+        <div key={index}>
           <div className={`message ${chat.sender}`}>
             <p>{chat.message}</p>
           </div>
-          
           <div ref={dummyRef} className="dummy-div"></div>
         </div>
       ))}
     </div>
   );
+};
+
+
+Chat.propTypes = {
+  botResponse: PropTypes.shape({
+    message: PropTypes.string,
+    sender: PropTypes.string
+  }),
+  sendUserResponse: PropTypes.string
 };
 
 export default Chat;
