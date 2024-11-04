@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Chat from "./Chat";
 import { analyzeNextSteps } from "./AnalizeNextSteps";
 //import "./Chatbot.scss";
+import {chatbotAPI} from "../../chessboard/api"
 
 interface ResponseBotObject {
   message: string;
@@ -16,22 +17,29 @@ const Chatbot: React.FC = () => {
     sender: "bot"
   });
   const [sendUserResponse, setSendUserResponse] = useState<string>("");
+  const [loading, setLoading] = useState(false);
+  const [language, setLanguage] = useState<string>("en");
 
-  // setting next step when there's response and option click
-  const setNextStep = (response: string) => {
+  // setting next step when there's response and 
+  const loader = async (fun) => {
+    debugger
+    setLoading(true);
+    const res = await fun()
+    setLoading(false);
+    return res;
+  }
+
+  const setChat = async(prompt: string) => {
     setStep(prevState => prevState + 1);
-    setSendUserResponse(response);
-    let res = analyzeNextSteps(step, response);
-    setBotResponse({ ...res, sender: "bot" });
+    const chatResponse = await loader(() => chatbotAPI(prompt, language));
+    console.log("hola")
+    console.log(chatResponse)
+    setSendUserResponse(prompt);
+    let res = chatResponse;
+    setBotResponse({ message: res, sender: "bot" });
     setUserResponse("");
   };
 
-  const optionClick = (e: React.MouseEvent<HTMLElement>) => {
-    let option = e.currentTarget.dataset.id;
-    if (option) {
-      setNextStep(option);
-    }
-  };
 
   // event handlers
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,7 +48,7 @@ const Chatbot: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setNextStep(userResponse);
+    setChat(userResponse);
   };
 
   return (
