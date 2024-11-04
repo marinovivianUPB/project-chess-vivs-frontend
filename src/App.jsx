@@ -32,7 +32,6 @@ function App() {
     const move = await loader(() => bestMoveAnalysis(fen, language));
     if (move) {
       setBestMove(move.agent_response);
-      console.log(move)
       setArrows([[move.data.from_square, move.data.to_square, 'green']]);
     }
   };

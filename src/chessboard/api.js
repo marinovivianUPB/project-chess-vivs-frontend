@@ -7,7 +7,7 @@ export const bestMoveAnalysis = async (fen, language) => {
         body: JSON.stringify({ fen, language })
       });
       const data = await response.json();
-      return data.move;
+      return data;
     } catch (error) {
       console.error("Error fetching best move:", error);
       return null;
@@ -56,7 +56,7 @@ export const chatbotAPI = async (message) => {
       body: JSON.stringify({ message }) 
     });
     const data = await response.json();
-    return data.data.response.response; 
+    return data.agent_response; 
   } catch (error) {
     console.error("Error connecting with chatbot:", error);
     return null;
