@@ -7,7 +7,7 @@ export const bestMoveAnalysis = async (fen, language) => {
         body: JSON.stringify({ fen, language })
       });
       const data = await response.json();
-      return data;
+      return data.move;
     } catch (error) {
       console.error("Error fetching best move:", error);
       return null;
@@ -46,3 +46,19 @@ export const bestMoveAnalysis = async (fen, language) => {
       return null;
     }
   };
+
+export const chatbotAPI = async (message) => {
+  const url = `http://127.0.0.1:8000/chat`;
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message }) 
+    });
+    const data = await response.json();
+    return data.data.response.response; 
+  } catch (error) {
+    console.error("Error connecting with chatbot:", error);
+    return null;
+  }
+};

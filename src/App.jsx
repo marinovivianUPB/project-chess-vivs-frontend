@@ -6,6 +6,7 @@ import TextBox from './chessboard/components/textBox';
 import { bestMoveAnalysis, playerAnalysis, boardAnalysis } from './chessboard/api';
 import Spinner from './assets/Spinner';
 import { useLanguage } from './language';
+import Chatbot from './chatbot/components/Chatbot';
 
 function App() {
   const [bestMove, setBestMove] = useState("");
@@ -103,7 +104,14 @@ function App() {
             <TextBox content={bestMove} style={{ flex: 1 }} />
           }
         </div>
+        <div>
+          <Chatbot
+            welcomeMsg ={text['welc']}
+            msg={text['msg']}
+          />
+        </div>  
       </div>
+      
     </div>
   );
 }
