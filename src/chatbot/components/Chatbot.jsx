@@ -1,54 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Chat from "./Chat";
-import {chatbotAPI} from "../../chessboard/api"
+import { chatbotAPI } from "../../chessboard/api"
 import Input from "./Input";
+import { useLanguage } from "../../language";
 
-
-const Chatbot = ({welcomeMsg, msg}) => {
+const Chatbot = () => {
   const [userResponse, setUserResponse] = useState("");
-  const [step, setStep] = useState(0);
-  const [botResponse, setBotResponse] = useState({
-    message: "",
-    sender: "bot"
-  });
-  const [sendUserResponse, setSendUserResponse] = useState("");
+  const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [language, setLanguage] = useState("en");
-
   const [isChatOpen, setIsChatOpen] = useState(false);
 
- 
+  const { text } = useLanguage();
 
-  // setting next step when there's response and 
-  const loader = async (fun) => {
-    debugger
-    setLoading(true);
-    const res = await fun()
-    setLoading(false);
-    return res;
-  }
-
-  const setChat = async(prompt) => {
-    setStep(prevState => prevState + 1);
-    const chatResponse = await loader(() => chatbotAPI(prompt));
-    console.log("hola")
-    console.log(chatResponse)
-    setSendUserResponse(prompt);
-    let res = chatResponse;
-    setBotResponse({ message: res, sender: "bot" });
-    setUserResponse("");
-  };
+  useEffect(() => {
+    const welcomeMsg = text['welc'];
+    setMessages([{ message: welcomeMsg, sender: "bot" }, ...messages.splice(1)]);
+  }, [text]);
   
+  const setChat = async (prompt) => {
+    setMessages(msg => [...msg, { message: prompt, sender: "user" }]);
+    setUserResponse("");
+    setLoading(true);
+    const chatResponse = await chatbotAPI(prompt);
+    setMessages(msg => [...msg, { message: chatResponse, sender: "bot" }]);
+    setLoading(false);
+  };
 
-
-  // event handlers
-
-  const handleInputChange = (e ) => {
+  const handleInputChange = (e) => {
     setUserResponse(e.target.value);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!userResponse) return;
     setChat(userResponse);
   };
 
@@ -56,7 +40,7 @@ const Chatbot = ({welcomeMsg, msg}) => {
     setIsChatOpen(!isChatOpen);
   };
 
-  
+
   return (
     <div>
       {/* Botón flotante para abrir/cerrar el chat */}
@@ -64,37 +48,38 @@ const Chatbot = ({welcomeMsg, msg}) => {
         onClick={toggleChat}
         className="fixed bottom-5 right-5 bg-green-500 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-lg hover:bg-green-600 transition duration-300 z-50"
       >
-        {isChatOpen ? "Close" : "Chat"}
+        {isChatOpen ? text['cls'] : 'Chat'}
       </button>
 
       {/* Chat en ventana modal */}
-      {isChatOpen && (
-        <div className="fixed bottom-20 right-5 w-80 bg-white rounded-lg shadow-lg z-50 flex flex-col">
-          <div className="p-4 max-w-lg mx-auto bg-cyan-800 rounded-lg shadow-lg flex flex-col h-[60vh]">
-            <div className="flex-grow overflow-y-auto mb-4">
-              <Chat
-                userResponse={userResponse}
-                botResponse={botResponse}
-                sendUserResponse={sendUserResponse}
-                welcomeMsg={welcomeMsg}
-              />
-            </div>
-            <Input
-              value={userResponse}
-              onChange={handleInputChange}
-              onSubmit={handleSubmit}
-              msg={msg}
+      <div className={`${isChatOpen ? "flex" : "hidden"} fixed bottom-20 right-5 w-[40rem] bg-white rounded-lg shadow-lg z-50 flex-col`}>
+        <div className="p-4 bg-cyan-800 rounded-lg shadow-lg flex flex-col h-[80vh]">
+          <div className="flex-grow overflow-y-auto mb-4">
+            <Chat
+              // userResponse={userResponse}
+              // botResponse={botResponse}
+              // sendUserResponse={sendUserResponse}
+              // welcomeMsg={text['welc']}
+              loading={loading}
+              messages={messages}
             />
           </div>
-          {/* Botón para cerrar el modal */}
-          <button
-            onClick={toggleChat}
-            className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
-          >
-            X
-          </button>
+          <Input
+            value={userResponse}
+            onChange={handleInputChange}
+            onSubmit={handleSubmit}
+            msg={text['msg']}
+            send={text['sn']}
+          />
         </div>
-      )}
+        {/* Botón para cerrar el modal */}
+        <button
+          onClick={toggleChat}
+          className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
+        >
+          X
+        </button>
+      </div>
     </div>
   );
 };

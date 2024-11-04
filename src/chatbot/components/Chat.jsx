@@ -1,40 +1,10 @@
-import { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
+import { useEffect, useRef } from "react";
+import Spinner from "../../assets/Spinner";
 
-const Chat = ({ userResponse,botResponse, sendUserResponse, welcomeMsg }) => {
-  const [messages, setMessages] = useState([]);
+const Chat = ({ messages, loading }) => {
   const dummyRef = useRef(null);
   const bodyRef = useRef(null);
-  const [processedUserResponse, setProcessedUserResponse] = useState("");
-  
-  // stacking up messages
-  useEffect(() => {
-    if (messages.length === 0) {
-      setMessages([
-        {
-          message: welcomeMsg,
-          sender: "bot"
-        }
-      ]);
-      
-    } else if (sendUserResponse !== processedUserResponse){
-      
-      const tempArray = [...messages];
-      tempArray.push({ message: sendUserResponse, sender: "user" });
-      
-      setMessages(tempArray);
-      setProcessedUserResponse(sendUserResponse); // Mark response as processed
-
-      
-      setTimeout(() => {
-        const temp2 = [...tempArray];
-        temp2.push(botResponse);
-        setMessages(temp2);
-      }, 1000);
-    }
-  }, [sendUserResponse, botResponse, welcomeMsg]);
-
- 
 
   // enable autoscroll after each message
   useEffect(() => {
@@ -54,14 +24,14 @@ const Chat = ({ userResponse,botResponse, sendUserResponse, welcomeMsg }) => {
       {messages.map((chat, index) => (
         <div key={index} className={`flex ${chat.sender === "user" ? "justify-end" : "justify-start"} my-2`}>
           <div
-            className={`max-w-xs rounded-lg px-4 py-2 ${
-              chat.sender === "user" ? "bg-blue-900 text-white" : "bg-orange-200 text-gray-800"
-            }`}
+            className={`max-w-lg rounded-lg px-4 py-2 ${chat.sender === "user" ? "bg-blue-900 text-white" : "bg-orange-200 text-gray-800"
+              }`}
           >
             <pre className="whitespace-pre-wrap">{chat.message}</pre>
           </div>
         </div>
       ))}
+      {loading && <Spinner />}
       <div ref={dummyRef} className="dummy-div"></div>
     </div>
   );

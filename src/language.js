@@ -10,8 +10,10 @@ const text = {
     'w': "White",
     'b': "Black",
     'lan': "Language",
-    'welc':'Are you ready to play chess? I am Magnus Carlsen your handsome instructor',
-    'msg':'Write your questions here'
+    'welc': 'Are you ready to play chess? I am Magnus Carlsen your handsome instructor',
+    'msg': 'Write your questions here',
+    'cls': 'Close',
+    'sn': 'Send',
   },
   "es": {
     0: "Mejor Movimiento",
@@ -22,8 +24,10 @@ const text = {
     'b': "Negras",
     'w': "Blancas",
     'lan': "Idioma",
-    'welc':'¿Estás listo para jugar al ajedrez? Soy Magnus Carlsen, tu atractivo instructor.',
-    'msg':'Escribe tus preguntas aquí'
+    'welc': '¿Estás listo para jugar al ajedrez? Soy Magnus Carlsen, tu atractivo instructor.',
+    'msg': 'Escribe tus preguntas aquí',
+    'cls': 'Cerrar',
+    'sn': 'Enviar',
   },
   "fr": {
     0: "Meilleur coup",
@@ -34,26 +38,28 @@ const text = {
     'b': "Noir",
     'w': "Blanc",
     'lan': "Langue",
-    'welc':'Etes-vous prêt à jouer aux échecs ? Je suis Magnus Carlsen, votre bel instructeur',
-    'msg':'Écrivez vos questions ici'
+    'welc': 'Etes-vous prêt à jouer aux échecs ? Je suis Magnus Carlsen, votre bel instructeur',
+    'msg': 'Écrivez vos questions ici',
+    'cls': 'Fermer',
+    'sn': 'Envoyer',
   }
 }
 
 export const useLanguage = () => {
   const [language, setLanguage] = useState('en');
 
-  useEffect(() => {
-    const storedLanguage = localStorage.getItem('language');
-    if (storedLanguage) {
+  const storedLanguage = localStorage.getItem('language');
+  if (storedLanguage ) {
+    if (language !== storedLanguage) {
       setLanguage(storedLanguage);
-    } else {
-      localStorage.setItem('language', language);
     }
-  }, []);
+  } else {
+    localStorage.setItem('language', language);
+  }
 
   const changeLanguage = (newLanguage) => {
-    setLanguage(newLanguage);
     localStorage.setItem('language', newLanguage);
+    setLanguage(newLanguage);
   };
 
   return { language, text: text[language], changeLanguage };

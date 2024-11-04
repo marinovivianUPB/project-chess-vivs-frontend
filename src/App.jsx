@@ -12,7 +12,6 @@ function App() {
   const [bestMove, setBestMove] = useState("");
   const [title, setTitle] = useState("");
   const [game, setGame] = useState(new Chess());
-  const [fenHistory, setFenHistory] = useState([]);
   const [loading, setLoading] = useState(false);
   const [colorMenu, setColorMenu] = useState(false);
   const [arrows, setArrows] = useState([]);
@@ -104,10 +103,7 @@ function App() {
           }
         </div>
         <div>
-          <Chatbot
-            welcomeMsg ={text['welc']}
-            msg={text['msg']}
-          />
+          <Chatbot />
         </div>  
       </div>
       
