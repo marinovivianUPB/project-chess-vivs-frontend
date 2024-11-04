@@ -4,6 +4,7 @@ import Board from './chessboard/components/Board';
 import Button from './chessboard/components/Button';
 import TextBox from './chessboard/components/textBox';
 import { callAPI, callAnalysisAPI, callStateAPI } from './chessboard/api';
+import Chatbot from './chatbot/components/Chatbot';
 
 function App() {
   const [bestMove, setBestMove] = useState("");
@@ -39,7 +40,7 @@ function App() {
 
   return (
     <div style={{ display: 'flex', height: '100vh', width: '100vw' }}>
-      <div style={{ display: 'flex' }}>
+      <div style={{ display: 'flex-col' }}>
         <Board game={game} setGame={setGame} onGameUpdate={setFenHistory} />
       </div>
       <div style={{ flex: 1, padding: '20px', backgroundColor: '#000000', borderLeft: '1px solid #ddd' }}>
@@ -52,7 +53,11 @@ function App() {
         <div style={{ display: 'flex', gap: '10px', width: '100%', marginTop: '10px' }}>
           <TextBox content={bestMove} style={{ flex: 1 }} /> 
         </div>
+        <div>
+          <Chatbot/>
+        </div>  
       </div>
+      
     </div>
   );
 }
