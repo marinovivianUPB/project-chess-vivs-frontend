@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Chat from "./Chat";
-import { analyzeNextSteps } from "./AnalizeNextSteps";
+import { analyzeNextSteps } from "../AnalizeNextSteps";
+import Input from "./Input";
 
 const Chatbot = () => {
   const [userResponse, setUserResponse] = useState(""); 
@@ -19,7 +20,6 @@ const Chatbot = () => {
     setUserResponse("");
   };
 
-  // Manejadores de eventos
   const handleInputChange = (e) => {
     setUserResponse(e.target.value);
   };
@@ -36,15 +36,11 @@ const Chatbot = () => {
         botResponse={botResponse}
         sendUserResponse={sendUserResponse}
       />
-      <form onSubmit={handleSubmit} className="form-container">
-        <input
-          onChange={handleInputChange}
-          value={userResponse}
-        />
-        <button>
-          <i className="far fa-paper-plane"></i>
-        </button>
-      </form>
+      <Input 
+        value={userResponse}
+        onChange={handleInputChange}
+        onSubmit={handleSubmit}
+      />
     </div>
   );
 };
