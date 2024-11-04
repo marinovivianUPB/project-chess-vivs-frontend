@@ -21,6 +21,16 @@ const text = {
     'w': "Blancas",
     'lan': "Idioma",
   },
+  "fr": {
+    0: "Meilleur coup",
+    1: "Analyse du joueur",
+    2: "Analyse du tableau",
+    3: "Application d'échecs",
+    4: "Tour",
+    'b': "Noir",
+    'w': "Blanc",
+    'lan': "Langue",
+  }
 }
 
 export const useLanguage = () => {
