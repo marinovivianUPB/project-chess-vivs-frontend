@@ -2,8 +2,6 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-ENV VITE_API_URL=http://localhost:8000
-
 COPY package.json .
 
 RUN npm install
