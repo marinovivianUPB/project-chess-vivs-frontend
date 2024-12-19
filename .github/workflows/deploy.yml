@@ -1,4 +1,4 @@
-name: Desplegando frontend en s3
+name: Desplegando Frontend en s3
 on:
   workflow_dispatch:
     inputs:
