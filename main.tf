@@ -50,6 +50,12 @@ resource "aws_s3_bucket_policy" "public_access" {
         Principal = "*",
         Action    = "s3:GetObject",
         Resource  = "${aws_s3_bucket.frontend_bucket.arn}/*"
+      },
+      {
+        Effect    = "Allow",
+        Principal = "*",
+        Action    = "s3:PutObject",
+        Resource  = "${aws_s3_bucket.frontend_bucket.arn}/*"
       }
     ]
   })
